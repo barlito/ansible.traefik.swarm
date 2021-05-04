@@ -65,13 +65,14 @@ The quick-setup variables are prefixed with `traefik_qs_`.
 | `traefik_qs_https_le`             | `false`                      | wether to setup letsencrypt using tls (only if https is enabled) |
 | `traefik_qs_https_le_mail`        | undefined                    | the email to use for letsencrypt (**Required**)                  |
 | `traefik_qs_log_level`            | `ERROR`                      | the loglevel to apply                                            |
-| `traefik_container_name`          | `'traefik'`                  | the container name                                               |
+| `traefik_stack_name`          | `'traefik'`                  | the container name                                               |
 | `traefik_network_name`            | `'traefik_proxy'`            | the network name                                                 |
 | `traefik_network_ipam_subnet`     | `'172.16.1.0/24'`            | subnet                                                           |
 | `traefik_network_ipam_gateway`    | `'172.16.1.1'`               | gateway                                                          |
 | `traefik_network_ipam_iprange`    | `'172.16.1.0/24'`            | iprange                                                          |
 | `traefik_image`                   | `'traefik'`                  | the image used                                                   |
-| `traefik_add_mounts`             | `[]`                         | additional volumes to mount                                      |
+| `traefik_add_volumes`             | `[]`                         | additional volumes to mount                                      |
+| `traefik_docker_add_volumes`             | `[]`                         | additional volumes to mount                                      |
 | `traefik_ports`                   | `['80:80', '443:443']`       | the ports shared                                                 |
 | `traefik_labels`                  | `{}`                         | labels to set on the traefik container.                          |
 

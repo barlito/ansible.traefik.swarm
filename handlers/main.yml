@@ -1,5 +1,18 @@
 ---
 - name: restart traefik container
-  docker_container:
-    name: "{{ traefik_container_name }}"
-    restart: true
+  docker_stack:
+    state: absent
+    name: "{{ traefik_stack_name }}"
+  notify:
+    - start traefik container
+
+- name: start traefik container
+  docker_stack:
+    state: present
+    name: "{{ traefik_stack_name }}"
+    compose:
+      - "{{ traefik_dir }}/docker-compose.yml"
+  register: result
+  until: result.rc == 0
+  retries: 3
+  delay: 2

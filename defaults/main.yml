@@ -17,7 +17,7 @@ traefik_qs_log_level: "{{ traefik_log_level | default('ERROR') }}"
 
 
 # service vars
-traefik_container_name: 'traefik'
+traefik_stack_name: 'traefik'
 traefik_network_name: "{{ traefik_network }}"
 traefik_network_ipam_temp: "{{ traefik_network_ipam | default({}) }}"
 traefik_network_ipam_subnet: "{{
@@ -33,7 +33,8 @@ traefik_network_ipam_iprange: "{{
   | default('172.16.1.0/24')
 }}"
 traefik_image: 'traefik'
-traefik_add_mounts: []
+traefik_add_volumes: []
+traefik_docker_add_volumes: []
 traefik_ports:
   - '80:80'
   - '443:443'

@@ -20,6 +20,9 @@ traefik_int_conf_entryPoints_https_redirect:
 
 traefik_int_conf_providers:
     docker:
+        endpoint: "unix:///var/run/docker.sock"
+        watch: true
+        exposedByDefault: true
         swarmMode: true
 
 traefik_int_conf_log:
@@ -56,19 +59,12 @@ traefik_conf_log: "{{
 # }}"
 
 
-traefik_mounts:
-    - source: "/etc/localtime"
-      target: "/etc/localtime:ro"
-      type: volume
-    - source: "/var/run/docker.sock"
-      target: "/var/run/docker.sock:ro"
-      type: volume
-    - source: "{{ traefik_dir }}/traefik.yml"
-      target: "/etc/traefik/traefik.yml"
-      type: volume
-    - source: "{{ traefik_dir }}/letsencrypt/"
-      target: "/letsencrypt/:rw"
-      type: volume
-    - source: traefik-data
-      target: "/etc/traefik"
-      type: volume
+traefik_volumes:
+    - /etc/localtime:/etc/localtime:ro
+    - "/var/run/docker.sock:/var/run/docker.sock:ro"
+    - "{{ traefik_dir }}/traefik.yml:/etc/traefik/traefik.yml"
+    - "{{ traefik_dir }}/letsencrypt/:/letsencrypt/:rw"
+    - traefik-data:/etc/traefik
+
+traefik_docker_volumes:
+    - traefik-data
