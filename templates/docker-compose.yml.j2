@@ -1,0 +1,30 @@
+version: "3.3"
+
+services:
+
+  traefik:
+    image: {{ traefik_image }}
+    ports:
+{% for port in traefik_ports %}
+      - {{ port }}
+{% endfor %}
+    volumes:
+{% for volume in traefik_volumes + traefik_add_volumes %}
+      - {{ volume }}
+{% endfor %}
+    deploy:
+      labels:
+{% for label in traefik_labels %}
+        - {{ label }}
+{% endfor %}
+    networks:
+      - {{ traefik_network_name }}
+
+volumes:
+{% for volume in traefik_docker_volumes + traefik_docker_add_volumes %}
+      {{ volume }}:
+{% endfor %}
+
+networks:
+  {{ traefik_network_name }}:
+    driver: overlay
