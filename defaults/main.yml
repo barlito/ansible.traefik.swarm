@@ -33,7 +33,7 @@ traefik_network_ipam_iprange: "{{
   | default('172.16.1.0/24')
 }}"
 traefik_image: 'traefik'
-traefik_add_volumes: []
+traefik_add_mounts: []
 traefik_ports:
   - '80:80'
   - '443:443'

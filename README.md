@@ -71,7 +71,7 @@ The quick-setup variables are prefixed with `traefik_qs_`.
 | `traefik_network_ipam_gateway`    | `'172.16.1.1'`               | gateway                                                          |
 | `traefik_network_ipam_iprange`    | `'172.16.1.0/24'`            | iprange                                                          |
 | `traefik_image`                   | `'traefik'`                  | the image used                                                   |
-| `traefik_add_volumes`             | `[]`                         | additional volumes to mount                                      |
+| `traefik_add_mounts`             | `[]`                         | additional volumes to mount                                      |
 | `traefik_ports`                   | `['80:80', '443:443']`       | the ports shared                                                 |
 | `traefik_labels`                  | `{}`                         | labels to set on the traefik container.                          |
 

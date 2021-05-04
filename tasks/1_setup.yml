@@ -29,18 +29,18 @@
       - subnet: '{{ traefik_network_ipam_subnet }}'
         gateway: '{{ traefik_network_ipam_gateway }}'
         iprange: '{{ traefik_network_ipam_iprange }}'
+  vars:
+    ansible_python_interpreter: "/usr/bin/env python3-docker"
 
-- name: 'setup : start traefik container'
-  become: true
-  docker_container:
+- name: 'setup : start traefik service'
+  community.docker.docker_swarm_service:
     name: '{{ traefik_container_name }}'
     image: '{{ traefik_image }}'
-    restart_policy: unless-stopped
-    published_ports: '{{ traefik_ports }}'
-    volumes: '{{ traefik_volumes + traefik_add_volumes }}'
+    restart_config:
+      condition: any
+    mounts: '{{ traefik_mounts + traefik_add_mounts }}'
     labels: '{{ traefik_labels }}'
     command:
       - '--configFile=/etc/traefik/traefik.yml'
     networks:
       - name: '{{ traefik_network_name }}'
-    networks_cli_compatible: true
