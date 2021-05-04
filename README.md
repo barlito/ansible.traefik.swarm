@@ -1,10 +1,7 @@
-# Ansible Role: traefik
+# Ansible Role: traefik swarm forked from [arillso/ansible.traefik](https://github.com/arillso/ansible.traefik)
 
-[![Build Status](https://img.shields.io/travis/arillso/ansible.traefik.svg?branch=master&style=popout-square)](https://travis-ci.org/arillso/ansible.traefik)
-[![Ansible Galaxy](https://img.shields.io/badge/ansible--galaxy-traefik-blue.svg?style=popout-square)](https://galaxy.ansible.com/arillso/traefik)
-[![Ansible Role](https://img.shields.io/ansible/role/d/48963.svg?style=popout-square)](https://galaxy.ansible.com/arillso/traefik)
 
-<!-- TOC depthFrom:2 depthTo:6 withLinks:1 updateOnSave:1 orderedList:0 -->
+  <!-- TOC depthFrom:2 depthTo:6 withLinks:1 updateOnSave:1 orderedList:0 -->
 
 - [Description](#description)
 - [Installation](#installation)
@@ -17,7 +14,7 @@
 		- [`traefik_api`](#traefikapi)
 		- [`traefik_ping`](#traefikping)
 
-<!-- /TOC -->
+  <!-- /TOC -->
 
 ## Description
 
@@ -35,9 +32,9 @@ allows you, to use one server as a host for multiple dockerized applications.
 
 ## Installation
 
-```bash
-ansible-galaxy install arillso.traefik
-```
+  ```bash
+  ansible-galaxy install arillso.traefik
+  ```
 
 ## Requirements
 
@@ -58,7 +55,7 @@ The quick-setup allows you to:
 The quick-setup variables are prefixed with `traefik_qs_`.
 
 | Name                              | Default                      | Description                                                      |
-| :-------------------------------- | :--------------------------- | :--------------------------------------------------------------- |
+  | :-------------------------------- | :--------------------------- | :--------------------------------------------------------------- |
 | `traefik_dir`                     | `/etc/traefik`               | where to store traefik data                                      |
 | `traefik_hostname`                | `"{{ inventory_hostname }}"` | the hostname of this instance                                    |
 | `traefik_network`                 | `traefik_proxy`              | the name of the generated network                                |
@@ -81,12 +78,12 @@ The quick-setup variables are prefixed with `traefik_qs_`.
 The default names of the generated configs are:
 
 - Entrypoints:
-  - `http`
-  - `https`
+	- `http`
+	- `https`
 - Providers:
-  - `docker`
+	- `docker`
 - Certificate Resolvers:
-  - `letsencrypt`
+	- `letsencrypt`
 
 ### In-Depth Configuration
 
@@ -94,7 +91,7 @@ As stated before, this role also allows you to configure traefik in-depth by
 using the traefik yaml config. The following variables can be used:
 
 | Name                                    | Default   | Description                                                                    |
-| :-------------------------------------- | :-------- | ------------------------------------------------------------------------------ |
+  | :-------------------------------------- | :-------- | ------------------------------------------------------------------------------ |
 | `traefik_confkey_global`                | undefined | [see Docs 📑](https://docs.traefik.io/reference/static-configuration/file/)    |
 | `traefik_confkey_serversTransport`      | undefined | [see Docs 📑](https://docs.traefik.io/reference/static-configuration/cli-ref/) |
 | `traefik_confkey_entryPoints`           | undefined | [see Docs 📑](https://docs.traefik.io/routing/entrypoints/#entrypoints)        |
@@ -143,15 +140,15 @@ To setup a simple, insecure api on container port `8080`, use the following
 config (**Note**: this example is insecure, please consider securing your api
 for use in production):
 
-```yaml
-traefik_confkey_api:
-  insecure: true
-  dashboard: true # use this for enabling the dashboard
-traefik_ports:
-  - '80:80'
-  - '443:443'
-  - '8080:8080'
-```
+  ```yaml
+  traefik_confkey_api:
+    insecure: true
+    dashboard: true # use this for enabling the dashboard
+  traefik_ports:
+    - '80:80'
+    - '443:443'
+    - '8080:8080'
+  ```
 
 This will automatically configure an [entrypoint on port `8080`](https://docs.traefik.io/operations/api/).
 
@@ -165,14 +162,14 @@ Follow the [Traefik config docs about ping](https://docs.traefik.io/operations/p
 to find the configuration you want to apply. As an Example, take a look at this
 config, which will expose the ping endpoint on port `8082`:
 
-```yaml
-traefik_confkey_entryPoints:
-  ping:
-    address: ':8082'
-traefik_confkey_ping:
-  entryPoint: 'ping'
-traefik_ports:
-  - '80:80'
-  - '443:443'
-  - '8082:8082'
-```
+  ```yaml
+  traefik_confkey_entryPoints:
+    ping:
+      address: ':8082'
+  traefik_confkey_ping:
+    entryPoint: 'ping'
+  traefik_ports:
+    - '80:80'
+    - '443:443'
+    - '8082:8082'
+  ```
