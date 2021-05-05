@@ -8,6 +8,15 @@
     group: docker
     mode: 0550
 
+- name: 'setup : create traefik letsencrypt directory'
+  become: true
+  file:
+    path: '{{ traefik_dir }}/letsencrypt'
+    state: directory
+    owner: root
+    group: docker
+    mode: 0550
+
 - name: 'setup : create traefik configuration'
   become: true
   copy:
