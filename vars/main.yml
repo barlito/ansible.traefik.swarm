@@ -19,6 +19,9 @@ traefik_int_conf_entryPoints_https_redirect:
                     scheme: https
 
 traefik_int_conf_providers:
+    file:
+        filename: "{{ traefik_dir }}/traefik-dynamic.yml"
+        watch: true
     docker:
         endpoint: "unix:///var/run/docker.sock"
         watch: true
@@ -28,7 +31,6 @@ traefik_int_conf_providers:
 traefik_int_conf_log:
     level: "{{ traefik_qs_log_level }}"
 
-
 traefik_int_conf_certificatesResolvers_le:
     letsencrypt:
         acme:
@@ -36,6 +38,10 @@ traefik_int_conf_certificatesResolvers_le:
             tlsChallenge: {}
             storage: /letsencrypt/acme.json
 
+traefik_int_conf_tlsCertificatesPaths:
+    certificates:
+        - certFile: "/certs/cert.crt"
+          keyFile: "/certs/privkey.pem"
 
 traefik_conf_global: "{{
   traefik_int_conf_global | combine(traefik_confkey_global | default({}))
@@ -58,12 +64,13 @@ traefik_conf_log: "{{
 #   )
 # }}"
 
-
 traefik_volumes:
     - /etc/localtime:/etc/localtime:ro
     - "/var/run/docker.sock:/var/run/docker.sock:ro"
     - "{{ traefik_dir }}/traefik.yml:/etc/traefik/traefik.yml"
+    - "{{ traefik_dir }}/traefik-dynamic.yml:/etc/traefik/traefik-dynamic.yml"
     - "{{ traefik_dir }}/letsencrypt/:/letsencrypt/:rw"
+    - "{{ traefik_dir }}/certs/:/certs/:ro"
     - traefik-data:/etc/traefik
 
 traefik_docker_volumes:

@@ -14,7 +14,7 @@ traefik_qs_https: "{{ traefik_https | default(false) }}"
 traefik_qs_https_redirect: "{{ traefik_https_redirect | default(false) }}"
 traefik_qs_https_le: false
 traefik_qs_log_level: "{{ traefik_log_level | default('ERROR') }}"
-
+traefik_qs_self_signed_certs: true
 
 # service vars
 traefik_stack_name: 'traefik'

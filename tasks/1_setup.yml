@@ -1,5 +1,5 @@
 ---
-- name: 'setup : create traefik directory'
+- name: 'setup : Create traefik directory'
   become: true
   file:
     path: '{{ traefik_dir }}'
@@ -8,7 +8,7 @@
     group: docker
     mode: 0550
 
-- name: 'setup : create traefik letsencrypt directory'
+- name: 'setup : Create traefik letsencrypt directory'
   become: true
   file:
     path: '{{ traefik_dir }}/letsencrypt'
@@ -17,7 +17,36 @@
     group: docker
     mode: 0550
 
-- name: 'setup : create traefik configuration'
+- name: 'setup : Create traefik self signed certs directory'
+  become: true
+  file:
+    path: '{{ traefik_dir }}/certs'
+    state: directory
+    owner: root
+    group: docker
+    mode: 0550
+
+- name: 'setup : Generate an OpenSSL private key with the default values (4096 bits, RSA)'
+  community.crypto.openssl_privatekey:
+    path: "{{ traefik_dir }}/certs/privkey.pem"
+  when: traefik_qs_https and traefik_qs_self_signed_certs and not traefik_qs_https_le
+
+- name: "Generate an OpenSSL Certificate Signing Request"
+  community.crypto.openssl_csr:
+    path: "{{ traefik_dir }}/certs/csr.csr"
+    privatekey_path: "{{ traefik_dir }}/certs/privkey.pem"
+    common_name: "{{ traefik_self_signed_certs_common_name }}"
+  when: traefik_qs_https and traefik_qs_self_signed_certs and not traefik_qs_https_le
+
+- name: 'setup : Generate a Self Signed OpenSSL certificate'
+  community.crypto.x509_certificate:
+    path: "{{ traefik_dir }}/certs/cert.crt"
+    privatekey_path: "{{ traefik_dir }}/certs/privkey.pem"
+    csr_path: "{{ traefik_dir }}/certs/csr.csr"
+    provider: selfsigned
+  when: traefik_qs_https and traefik_qs_self_signed_certs and not traefik_qs_https_le
+
+- name: 'setup : Create traefik static configuration'
   become: true
   copy:
     dest: '{{ traefik_dir }}/traefik.yml'
@@ -28,12 +57,21 @@
   notify:
     - restart traefik container
 
-- name: "setup : build traefik docker-compose"
+- name: 'setup : Create traefik dynamic configuration'
+  become: true
+  copy:
+    dest: '{{ traefik_dir }}/traefik-dynamic.yml'
+    owner: root
+    group: docker
+    mode: 0550
+    content: '{{ traefik_dynamic_config | to_nice_yaml }}'
+
+- name: "setup : Build traefik docker-compose"
   template:
     src: "docker-compose.yml.j2"
     dest: "{{ traefik_dir }}/docker-compose.yml"
 
-- name: 'setup : deploy traefik stack from a compose file'
+- name: 'setup : Deploy traefik stack from a compose file'
   docker_stack:
     state: present
     name: "{{ traefik_stack_name }}"

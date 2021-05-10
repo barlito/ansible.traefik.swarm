@@ -5,6 +5,7 @@
     name: "{{ traefik_stack_name }}"
   notify:
     - start traefik container
+  ignore_errors: yes
 
 - name: start traefik container
   docker_stack:

@@ -65,6 +65,7 @@ The quick-setup variables are prefixed with `traefik_qs_`.
 | `traefik_qs_https_le`             | `false`                      | wether to setup letsencrypt using tls (only if https is enabled) |
 | `traefik_qs_https_le_mail`        | undefined                    | the email to use for letsencrypt (**Required**)                  |
 | `traefik_qs_log_level`            | `ERROR`                      | the loglevel to apply                                            |
+| `traefik_qs_self_signed_certs`       | `true`                       | wether to setup self signed certs (only if https is enabled) |
 | `traefik_stack_name`          | `'traefik'`                  | the container name                                               |
 | `traefik_network_name`            | `'traefik_proxy'`            | the network name                                                 |
 | `traefik_network_ipam_subnet`     | `'172.16.1.0/24'`            | subnet                                                           |
@@ -85,6 +86,9 @@ The default names of the generated configs are:
 	- `docker`
 - Certificate Resolvers:
 	- `letsencrypt`
+
+### Self signed cert
+If using sefl signed cert, you need to define traefik_self_signed_certs_common_name var with your wildcard domain
 
 ### In-Depth Configuration
 
